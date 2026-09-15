@@ -109,19 +109,21 @@ Lower confidence on the last example reflects genuine sentence ambiguity, not a 
 
 ## 10. Project Structure
 
+```
 Practical-2/
 ├── Practical_2_Text_Classification_using_Embedding_Layer_and_LSTM.ipynb
 ├── README.md
 ├── ag_news_lstm_model.keras
 ├── ag_news_vectorizer_vocab.txt
 └── Screenshots/
-├── 01_text_length_distribution.PNG
-├── 02_model_summary.PNG
-├── 03_accuracy_loss_curves.PNG
-├── 04_overfitting_gap.PNG
-├── 05_confusion_matrix.PNG
-├── 06_classification_report.PNG
-└── 07_sample_prediction.PNG
+    ├── 01_text_length_distribution.PNG
+    ├── 02_model_summary.PNG
+    ├── 03_accuracy_loss_curves.PNG
+    ├── 04_overfitting_gap.PNG
+    ├── 05_confusion_matrix.PNG
+    ├── 06_classification_report.PNG
+    └── 07_sample_prediction.PNG
+```
 
 
 ## 11. Requirements & How to Run
