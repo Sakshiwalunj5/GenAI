@@ -154,4 +154,4 @@ The experiment highlights the difference between deterministic reconstruction an
 T.Y. B.Tech – CSE (AI & ML)  
 Generative AI Lab
 
-**GitHub:** (https://github.com/Sakshiwalunj5/GenAI/tree/main/Practical-3-Autoencoder-and-VAE)
+**GitHub:** https://github.com/Sakshiwalunj5/GenAI/tree/main/Practical-3-Autoencoder-and-VAE
