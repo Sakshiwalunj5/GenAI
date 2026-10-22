@@ -1,8 +1,8 @@
 # Autoencoder and Variational Autoencoder for Image Reconstruction
 
-**Practical No. 03 – Autoencoder and Variational Autoencoder for Image Reconstruction**
+**Practical No. 03 – Generative AI Lab**
 
-Implementation and comparison of a Convolutional Autoencoder and a Variational Autoencoder (VAE) for reconstructing MNIST handwritten digit images and generating new samples using latent-space sampling.
+Implementation and comparison of a Convolutional Autoencoder and a Variational Autoencoder (VAE) for image reconstruction and generation using the MNIST handwritten digit dataset.
 
 **Course:** Generative AI Lab | **Student:** Sakshi Uttam Walunj | **Class:** T.Y. B.Tech | **Department:** CSE (AI & ML)
 
@@ -10,44 +10,66 @@ Implementation and comparison of a Convolutional Autoencoder and a Variational A
 
 ## 1. Objective
 
-Build an Autoencoder and a Variational Autoencoder for image reconstruction and generation, then compare their performance using reconstruction quality, training behaviour, and Mean Squared Error (MSE).
+To build an Autoencoder and a Variational Autoencoder for image reconstruction and generation, and compare their performance using reconstruction quality, training behaviour, and Mean Squared Error (MSE).
 
-**Pipeline:** Dataset loading → preprocessing → Autoencoder construction → VAE construction → model training → image reconstruction → VAE image generation → performance comparison.
+**Pipeline:** Dataset loading → preprocessing → model construction → training → reconstruction → image generation → performance evaluation.
 
 ## 2. Dataset Description
 
-The experiment uses the **MNIST Handwritten Digit Dataset**, consisting of grayscale images of handwritten digits from 0 to 9.
+The experiment uses the **MNIST Handwritten Digit Dataset**, containing grayscale images of handwritten digits from 0 to 9.
 
 - Training images: 60,000
 - Test images: 10,000
 - Image dimensions: 28 × 28 pixels
 - Number of classes: 10
-- Input normalization: Pixel values scaled to the range [0, 1]
+- Preprocessing: Pixel values normalized to the range [0, 1]
 
 The dataset is loaded using `tensorflow.keras.datasets.mnist`.
 
+### Sample Dataset Images
+
+The following images show examples from the MNIST dataset used for training and evaluation.
+
+![Sample MNIST handwritten digits](screenshots/01_mnist_dataset.png)
+
 ## 3. Technologies Used
 
-- **Language:** Python
-- **Deep Learning:** TensorFlow, Keras
+- **Programming Language:** Python
+- **Deep Learning Framework:** TensorFlow and Keras
 - **Numerical Computing:** NumPy
 - **Visualization:** Matplotlib
 - **Environment:** Jupyter Notebook / Google Colab
 
 ## 4. Convolutional Autoencoder
 
-The Autoencoder compresses input images into a compact latent representation using an encoder and reconstructs them using a decoder.
+The Autoencoder consists of an encoder and a decoder. The encoder compresses the input image into a compact latent representation, and the decoder reconstructs the image from that representation.
 
 - Latent dimension: 32
 - Optimizer: Adam
-- Loss function: Mean Squared Error (MSE)
+- Reconstruction loss: Mean Squared Error (MSE)
 - Training epochs: 10
 
-The model is evaluated using reconstruction loss and comparisons between original and reconstructed images.
+### Autoencoder Architecture
+
+The model summary shows the convolutional layers, feature-map dimensions, and trainable parameters used to encode and reconstruct images.
+
+![Autoencoder architecture summary](screenshots/02_autoencoder_architecture.PNG)
+
+### Autoencoder Training
+
+The graph shows training and validation reconstruction loss over the training epochs. Both losses decrease and converge, indicating that the model learns to reconstruct the input images.
+
+![Autoencoder training and validation loss](screenshots/03_autoencoder_training.PNG)
+
+### Autoencoder Reconstruction Results
+
+The reconstructed images are compared with the original handwritten digits to evaluate how well the Autoencoder preserves the input image structure.
+
+![Autoencoder reconstruction results](screenshots/04_autoencoder_reconstruction.PNG)
 
 ## 5. Variational Autoencoder (VAE)
 
-The VAE learns a probabilistic latent representation using the latent mean and log variance. The reparameterization trick enables latent-vector sampling, and the decoder reconstructs images from these vectors.
+The VAE learns a probabilistic latent representation using the mean and log variance. The reparameterization trick enables latent-vector sampling, while the decoder reconstructs images from sampled vectors.
 
 - Latent dimension: 16
 - Optimizer: Adam
@@ -55,45 +77,61 @@ The VAE learns a probabilistic latent representation using the latent mean and l
 - Regularization: KL-divergence
 - Training epochs: 10
 
-The trained decoder is also used to generate new digit-like images by sampling from the latent space.
+### VAE Architecture
 
-## 6. Model Training and Evaluation
+The encoder estimates the latent mean and log variance. The sampling layer produces latent vectors that can be passed to the decoder for reconstruction or generation.
 
-Both models are trained and evaluated using the MNIST dataset.
+![VAE encoder architecture](screenshots/05_vae_architecture.PNG)
 
-The evaluation includes:
+### VAE Training Performance
 
-- Training and validation loss curves.
-- Original versus reconstructed image comparisons.
-- Test-set reconstruction MSE.
-- A bar chart comparing reconstruction errors.
-- VAE-generated image samples.
-- Analysis of the differences between deterministic and probabilistic latent representations.
+The following graphs show the VAE's total loss, reconstruction loss, and KL-divergence loss for training and validation. These components illustrate the balance between image reconstruction and latent-space regularization.
 
-## 7. Results
+![VAE training, reconstruction and KL losses](screenshots/06_vae_training.PNG)
 
-The recorded test-set reconstruction results are:
+### VAE Reconstruction Results
+
+The original images are compared with their VAE reconstructions to assess reconstruction quality using a probabilistic latent representation.
+
+![VAE reconstruction results](screenshots/07_vae_reconstruction.PNG)
+
+### VAE-Generated Images
+
+The VAE decoder generates new digit-like images by sampling latent vectors. These samples demonstrate the model's image-generation capability beyond reconstructing existing inputs.
+
+![Images generated by the VAE](screenshots/08_vae_generated_images.PNG)
+
+## 6. Performance Comparison
+
+Both models are evaluated on the same test images. Their reconstruction quality is compared visually and quantitatively using Mean Squared Error.
+
+### Visual Reconstruction Comparison
+
+The following output compares original images with the reconstructions produced by the Autoencoder and VAE.
+
+![Original, Autoencoder and VAE reconstruction comparison](screenshots/09a_reconstruction_comparison.PNG)
+
+### Quantitative Results
+
+The recorded test-set MSE values are:
 
 | Metric | Autoencoder | VAE |
 |---|---:|---:|
 | Mean Squared Error (MSE) | 0.003710 | 0.009876 |
 
-The Autoencoder achieved lower pixel-wise reconstruction error in this evaluation. The VAE additionally supports probabilistic latent-space learning and image generation.
+The printed comparison output identifies the Autoencoder as having lower reconstruction MSE in this evaluation.
 
-The VAE's training objective includes reconstruction loss and KL-divergence. Its total loss is therefore not directly comparable to the Autoencoder's MSE.
+![Printed reconstruction MSE results](screenshots/09b_mse_results.PNG)
 
-## 8. Visual Results
+### MSE Comparison Chart
 
-The `screenshots/` directory contains the outputs produced during the experiment, including:
+The bar chart visualizes the difference in reconstruction MSE between the two models. A lower MSE indicates lower pixel-wise reconstruction error.
 
-- MNIST dataset samples.
-- Autoencoder and VAE architecture summaries.
-- Training and validation loss graphs.
-- Original and reconstructed image grids.
-- VAE-generated digit samples.
-- Reconstruction MSE output and comparison chart.
+![Autoencoder and VAE MSE comparison chart](screenshots/09c_mse_comparison_chart.PNG)
 
-## 9. How to Run
+The VAE's total training objective also includes KL-divergence. Therefore, its total loss should not be directly compared with the Autoencoder's MSE as though they were the same metric.
+
+## 7. How to Run
 
 ### Install Dependencies
 
@@ -103,52 +141,32 @@ pip install tensorflow numpy matplotlib jupyter
 
 ### Execute the Notebook
 
-1. Clone or download this repository.
+1. Clone or download the repository.
 2. Open `Practical_No_03_Autoencoder_VAE_Image_Reconstruction(1).ipynb` in Jupyter Notebook or Google Colab.
 3. Run the notebook cells in order.
 4. Allow the MNIST dataset to download when requested.
-5. Review the training curves, reconstructed images, generated samples, and evaluation metrics.
+5. Review the model summaries, training curves, reconstruction results, generated samples, and MSE comparison.
 
-## 10. Project Structure
-
-```text
-Practical-3-Autoencoder-and-VAE/
-├── Practical_No_03_Autoencoder_VAE_Image_Reconstruction(1).ipynb
-├── readme.md
-└── screenshots/
-    ├── 01_mnist_dataset.png
-    ├── 02_autoencoder_architecture.PNG
-    ├── 03_autoencoder_training.PNG
-    ├── 04_autoencoder_reconstruction.PNG
-    ├── 05_vae_architecture.PNG
-    ├── 06_vae_training.PNG
-    ├── 07_vae_reconstruction.PNG
-    ├── 08_vae_generated_images.PNG
-    ├── 09a_reconstruction_comparison.PNG
-    ├── 09b_mse_results.PNG
-    └── 09c_mse_comparison_chart.PNG
-```
-
-## 11. Key Learning Outcomes
+## 8. Key Learning Outcomes
 
 - Image preprocessing and normalization.
 - Convolutional encoder-decoder architectures.
-- Latent-space representation learning.
+- Latent representation learning.
 - Variational inference and the reparameterization trick.
 - Reconstruction loss and KL-divergence.
 - Model evaluation using MSE.
 - Visual analysis of reconstructed images.
-- Image generation using a VAE latent space.
+- Image generation using latent-space sampling.
 
-## 12. Conclusion
+## 9. Conclusion
 
-This practical demonstrates the implementation and evaluation of an Autoencoder and a Variational Autoencoder for image reconstruction using MNIST. The Autoencoder achieved lower reconstruction MSE in the recorded experiment, while the VAE provided additional generative capabilities through probabilistic latent-space sampling.
+This practical demonstrates the implementation and comparison of an Autoencoder and a Variational Autoencoder for image reconstruction using MNIST. The Autoencoder achieved lower pixel-wise reconstruction error in the recorded evaluation, while the VAE provided additional generative capabilities through probabilistic latent-space sampling.
 
 The experiment highlights the difference between deterministic reconstruction and probabilistic representation learning for image generation.
 
 ---
 
-## 13. Author
+## 10. Author
 
 **Sakshi Uttam Walunj**  
 T.Y. B.Tech – CSE (AI & ML)  
