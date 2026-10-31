@@ -1,368 +1,344 @@
 # Generative AI Lab – Assignment 02
-## Comparative Analysis of Image Reconstruction and Image Generation Models
 
-**Practical Study of Autoencoder, Variational Autoencoder, DCGAN and Stable Diffusion**
+## Comparative Study and Practical Analysis of Generative AI Models
+### Image Reconstruction and Image Generation Using Autoencoder, VAE, DCGAN and Stable Diffusion
+
+## 1. Student Details
+
+**Name:** Sakshi Uttam Walunj  
+**PRN:** 202502110007  
+**Class:** T.Y. B.Tech  
+**Batch:** A3  
+**Department:** Computer Science and Engineering (AI & ML)  
+**Course:** Generative AI Lab  
+**Institute:** MIT Academy of Engineering, Alandi, Pune  
+
+**Group Members:**
+- Shreya Dattaram Bhosale
+- Dhanashri Shah
+
+**Submission Date:** 31 October 2026
 
 ---
 
-## 1. Student Information
+## 2. Introduction
 
-| Field | Details |
-|---|---|
-| Student Name | Sakshi Uttam Walunj |
-| PRN | 202502110007 |
-| Class | T.Y. B.Tech |
-| Batch | A3 |
-| Department | Computer Science and Engineering (AI & ML) |
-| Course | Generative AI Lab |
-| Institute | MIT Academy of Engineering, Alandi, Pune |
-| Group Members | Shreya Dattaram Bhosale, Dhanashri Shah |
-| Submission Date | 31-10-2026 |
+This assignment focuses on understanding and practically implementing different Generative AI models used for image reconstruction and image generation.
 
-## 2. Project Overview
+Four models are studied: Convolutional Autoencoder, Variational Autoencoder (VAE), Deep Convolutional Generative Adversarial Network (DCGAN), and pretrained Stable Diffusion.
 
-This assignment explores four generative AI models and examines how they reconstruct existing images or create new ones.
+The practical work covers two course outcomes:
 
-The practical work is divided into two parts:
+- **CO3 – Image Reconstruction:** Implementing Autoencoder and VAE for reconstructing images.
+- **CO4 – Image Generation:** Implementing DCGAN and using a pretrained Stable Diffusion model for generating images.
 
-- **CO3 – Image Reconstruction:** Convolutional Autoencoder (AE) and Variational Autoencoder (VAE).
-- **CO4 – Image Generation:** Deep Convolutional Generative Adversarial Network (DCGAN) and pretrained Stable Diffusion.
-
-The experiments use Fashion-MNIST for the reconstruction models and DCGAN. Stable Diffusion is used separately to generate a fashion-product image from a text description.
+The experiments demonstrate how different model architectures learn image representations and produce reconstructed or newly generated outputs.
 
 ## 3. Objectives
 
-- Understand the architecture and operation of four generative AI models.
-- Prepare and visualize the Fashion-MNIST dataset.
-- Reconstruct clothing images using AE and VAE.
-- Examine the effect of latent representations on reconstruction quality.
-- Generate new clothing-like images using DCGAN.
-- Perform text-to-image generation using pretrained Stable Diffusion.
-- Evaluate AE and VAE using MSE and MAE.
-- Compare model outputs, advantages, limitations and applications.
-- Document practical observations, AI usage and group contributions.
+- Understand the working principles of different generative models.
+- Load and preprocess the Fashion-MNIST dataset.
+- Implement image reconstruction using Autoencoder and VAE.
+- Understand latent-space representation and the reparameterization trick.
+- Generate synthetic images using DCGAN.
+- Perform text-to-image generation using Stable Diffusion.
+- Evaluate reconstruction performance using MSE and MAE.
+- Visualize training losses and generated outputs.
+- Compare the architectures, advantages, limitations and applications of all four models.
 
-## 4. Dataset Description
+## 4. Dataset Used
 
 ### Fashion-MNIST
 
-Fashion-MNIST is a grayscale image dataset containing ten categories of clothing and accessories. It is used for the AE, VAE and DCGAN experiments.
+Fashion-MNIST is used for the Autoencoder, VAE and DCGAN experiments. It contains grayscale images belonging to ten different clothing categories.
 
-| Dataset property | Description |
+| Dataset Property | Description |
 |---|---|
-| Dataset | Fashion-MNIST |
 | Training images | 60,000 |
 | Testing images | 10,000 |
-| Image dimensions | 28 × 28 pixels |
+| Image dimensions | 28 × 28 |
 | Channels | 1 (grayscale) |
-| Categories | 10 |
-| Normalized pixel range | 0 to 1 |
+| Number of classes | 10 |
+| Pixel range | 0–1 after normalization |
 
-The categories include T-shirt/top, Trouser, Pullover, Dress, Coat, Sandal, Shirt, Sneaker, Bag and Ankle boot.
+The dataset categories include T-shirt/top, Trouser, Pullover, Dress, Coat, Sandal, Shirt, Sneaker, Bag and Ankle boot.
 
-### Dataset Visualization
+### Dataset Samples
 
-The following figure shows sample images from the dataset.
+The following figure displays sample images from Fashion-MNIST.
 
-![Fashion-MNIST dataset samples](screenshots/01_fashion_mnist_samples.png)
+![Fashion-MNIST Dataset Samples](Screenshots/01_fashion_mnist_samples.png)
 
 ## 5. Part A – Image Reconstruction (CO3)
 
 ### 5.1 Convolutional Autoencoder
 
-A convolutional Autoencoder learns a compressed representation of an input image and uses that representation to reconstruct the original image.
+A Convolutional Autoencoder learns a compressed representation of an input image and reconstructs the image using a decoder.
 
 **Architecture:**
-- Encoder: convolutional layers extract image features and reduce spatial dimensions.
-- Latent representation: stores the compressed image information.
-- Decoder: transposed convolutional layers reconstruct the image.
+- Encoder: extracts image features using convolutional layers.
+- Latent representation: stores compressed information.
+- Decoder: reconstructs the image from the encoded representation.
 
-**Implementation configuration:**
+**Implementation Configuration**
 
-| Parameter | Configuration |
+| Parameter | Value |
 |---|---|
 | Input shape | 28 × 28 × 1 |
 | Latent dimension | 128 |
 | Optimizer | Adam |
 | Learning rate | 0.001 |
 | Loss function | Mean Squared Error |
-| Epochs | As executed in the notebook |
-| Batch size | As executed in the notebook |
+| Epochs | As configured in the notebook |
+| Batch size | As configured in the notebook |
 
-**Training performance**
+**Training and Validation Loss**
 
-![Autoencoder training and validation loss](screenshots/02_autoencoder_loss.png)
+![Autoencoder Loss](Screenshots/02_autoencoder_loss.png)
 
-**Reconstruction output**
+**Reconstruction Results**
 
-![Autoencoder reconstruction results](screenshots/03_autoencoder_reconstruction.png)
+![Autoencoder Reconstruction](Screenshots/03_autoencoder_reconstruction.PNG)
 
 ### 5.2 Variational Autoencoder (VAE)
 
-A Variational Autoencoder learns a probabilistic latent representation instead of mapping each input to a single fixed latent vector.
+A Variational Autoencoder learns a probabilistic latent representation. The encoder estimates the mean and log-variance, and the reparameterization trick is used to sample a latent vector.
 
-The encoder predicts the mean and log-variance of the latent distribution. The reparameterization trick is used to sample a latent vector, which is passed to the decoder to reconstruct the image.
+The decoder uses the sampled latent representation to reconstruct the input image.
 
-**Implementation configuration:**
+**Implementation Configuration**
 
-| Parameter | Configuration |
+| Parameter | Value |
 |---|---|
 | Input shape | 28 × 28 × 1 |
-| Latent dimension | 64 |
+| Latent dimension | 128 |
 | Beta | 0.25 |
 | Optimizer | Adam |
 | Loss function | Reconstruction loss + weighted KL divergence |
-| Epochs | As executed in the notebook |
-| Batch size | As executed in the notebook |
+| Epochs | As configured in the notebook |
+| Batch size | As configured in the notebook |
 
-**Training performance**
+**Training and Validation Loss**
 
-![VAE training curves](screenshots/04_vae_loss.png)
+![VAE Loss](Screenshots/04_vae_loss.PNG)
 
-**Reconstruction output**
+**Reconstruction Results**
 
-![VAE reconstruction results](screenshots/05_vae_reconstruction.png)
+![VAE Reconstruction](Screenshots/05_vae_reconstruction.PNG)
 
 ### 5.3 Reconstruction Evaluation
 
-The Autoencoder and VAE are evaluated using the same test images. Mean Squared Error and Mean Absolute Error are used to measure pixel-wise reconstruction differences.
+The Autoencoder and VAE are evaluated using the same test dataset. Mean Squared Error (MSE) and Mean Absolute Error (MAE) are used to measure the difference between original and reconstructed images.
 
 | Model | Test MSE | Test MAE |
 |---|---:|---:|
-| Convolutional Autoencoder | Enter your executed value | Enter your executed value |
-| Variational Autoencoder | Enter your executed value | Enter your executed value |
+| Autoencoder | 0.004870 | 0.033197 |
+| Variational Autoencoder | 0.008218 | 0.043392 |
 
-Lower MSE and MAE indicate smaller pixel-wise reconstruction errors. The visual outputs are also examined to identify blurring, distortion and loss of image details.
+The Autoencoder achieved lower MSE and MAE in this execution, indicating lower pixel-wise reconstruction error. The VAE, however, provides a probabilistic latent space that supports sampling and image generation.
 
 ## 6. Part B – Image Generation (CO4)
 
 ### 6.1 Deep Convolutional Generative Adversarial Network (DCGAN)
 
-DCGAN uses two neural networks that compete during training.
+DCGAN uses two neural networks that compete with each other during training.
 
-- **Generator:** receives random noise and produces synthetic images.
-- **Discriminator:** evaluates whether an image is real or generated.
+- **Generator:** Converts random noise vectors into synthetic images.
+- **Discriminator:** Learns to distinguish real images from generated images.
 
-The generator gradually learns to create images that resemble the Fashion-MNIST training samples.
+Through adversarial training, the generator gradually learns to produce images resembling the Fashion-MNIST dataset.
 
-**Implementation configuration:**
+**Generated Images**
 
-| Parameter | Configuration |
-|---|---|
-| Input | Random noise vector |
-| Noise dimension | 100 |
-| Generated image shape | 28 × 28 × 1 |
-| Generator output activation | tanh |
-| Optimizer | Adam |
-| Learning rate | 0.0002 |
-| Beta 1 | 0.5 |
-| Epochs | As executed in the notebook |
+![DCGAN Generated Images](Screenshots/06_dcgan_generated_grid.PNG)
 
-**Generated image samples**
+**Generator and Discriminator Loss**
 
-![DCGAN generated images](screenshots/06_dcgan_generated_grid.png)
+![DCGAN Loss](Screenshots/07_dcgan_losses.PNG)
 
-**Generator and discriminator performance**
-
-![DCGAN generator and discriminator losses](screenshots/07_dcgan_losses.png)
-
-The generated images are examined for clothing-like shapes, visual consistency, diversity and artifacts. Since DCGAN learns through adversarial training, its output quality depends on training stability and model configuration.
+The generated samples are examined for clothing-like structures, visual quality, diversity and image artifacts.
 
 ### 6.2 Pretrained Stable Diffusion
 
-Stable Diffusion is a pretrained latent diffusion model used for text-conditioned image generation.
+Stable Diffusion is a pretrained latent diffusion model used for generating images from text prompts.
 
 Its major components include:
 
-- Text encoder: converts the text prompt into an encoded representation.
-- U-Net: performs iterative denoising in latent space.
-- Scheduler: controls the denoising process.
-- VAE: converts the final latent representation into an image.
+- **Text Encoder:** Converts the input prompt into encoded representations.
+- **U-Net:** Performs iterative denoising in latent space.
+- **Scheduler:** Controls the denoising steps.
+- **VAE:** Converts the final latent representation into an image.
 
-Unlike the previous experiments, Stable Diffusion is used as a pretrained model and is not trained on Fashion-MNIST.
+Unlike the previous experiments, Stable Diffusion is not trained on Fashion-MNIST. A pretrained Stable Diffusion v1.5 pipeline is used for text-to-image generation.
 
-**Generation prompt:**
+**Prompt Used:**
 
-> A high-quality studio product photograph of a single classic white sneaker, side view, isolated on a clean light grey background, soft studio lighting, sharp details and realistic material texture.
+"A high-quality studio product photograph of a single classic white sneaker, side view, isolated on a clean light grey background, soft studio lighting, sharp details, realistic material texture."
 
-**Negative prompt:**
+**Negative Prompt:**
 
-> Blurry, distorted, low resolution, multiple shoes, cropped object, watermark, text and logo.
+"Blurry, distorted, low resolution, multiple shoes, cropped object, watermark, text, logo."
 
-**Generation configuration:**
+**Generation Configuration**
 
-| Parameter | Configuration |
+| Parameter | Value |
 |---|---|
 | Model | Stable Diffusion v1.5 |
-| Inference steps | As executed in the notebook |
+| Inference steps | 20 |
 | Guidance scale | 7.0 |
-| Output resolution | 512 × 512 |
+| Resolution | 512 × 512 |
 | Attention slicing | Enabled |
-| CPU offloading | Enabled where supported |
 
-**Generated image**
+**Generated Image**
 
-![Stable Diffusion generated sneaker](screenshots/08_stable_diffusion_output.png)
+![Stable Diffusion Output](Screenshots/08_stable_diffusion_output.PNG)
 
-The generated image is evaluated based on prompt adherence, object appearance, visual detail and image quality.
+The output is examined based on prompt adherence, object appearance, visual details and overall image quality.
 
 ## 7. Comparative Analysis
 
-| Comparison factor | Autoencoder | VAE | DCGAN | Stable Diffusion |
-|---|---|---|---|---|
-| Primary purpose | Image reconstruction | Reconstruction and latent-space generation | Image generation | Text-to-image generation |
-| Input | Existing image | Existing image | Random noise | Text prompt and random noise |
-| Main components | Encoder and decoder | Encoder, latent distribution, sampling and decoder | Generator and discriminator | Text encoder, U-Net, scheduler and VAE |
-| Output | Reconstructed image | Reconstructed or sampled image | New synthetic image | New prompt-conditioned image |
-| Main advantage | Simple reconstruction architecture | Probabilistic latent representation | Learns to generate new samples | Detailed prompt-guided image generation |
-| Main limitation | May lose fine image details | Reconstructions may appear smooth | Training can be unstable | High computational requirements |
-| Applications | Compression and anomaly detection | Representation learning and generation | Synthetic image generation | Creative design and text-to-image applications |
+| Model | Main Purpose | Input | Output |
+|---|---|---|---|
+| Autoencoder | Image reconstruction | Input image | Reconstructed image |
+| VAE | Reconstruction and latent-space generation | Input image or latent sample | Reconstructed or sampled image |
+| DCGAN | Synthetic image generation | Random noise | New generated image |
+| Stable Diffusion | Text-to-image generation | Text prompt and random noise | Prompt-conditioned image |
 
-### 7.1 Results and Discussion
+### Results and Discussion
 
-The AE and VAE experiments demonstrate two approaches to learning image representations and reconstructing input images. Their reconstruction quality is compared using test-set MSE, MAE and visual inspection.
+The Autoencoder and VAE demonstrate two different approaches to learning image representations and reconstructing input images. Their performance is evaluated using MSE, MAE and visual comparison.
 
-DCGAN produces new grayscale clothing-like images from random noise. Its outputs are different from reconstructed test images because it does not receive a specific image to reproduce.
+DCGAN generates new Fashion-MNIST-like images from random noise. Unlike reconstruction models, it does not attempt to reproduce a particular input image.
 
-Stable Diffusion generates a separate high-resolution sneaker image using a natural-language prompt. It provides text-based control over image generation, unlike the unconditional DCGAN experiment.
+Stable Diffusion generates a high-resolution sneaker image using a text prompt. It demonstrates how a pretrained diffusion model can interpret textual descriptions and convert them into visual outputs.
 
-The four models therefore address different tasks and should be evaluated using metrics appropriate to their outputs.
+The experiments highlight the differences between image reconstruction, unconditional image generation and text-conditioned image generation.
 
-## 8. Technologies and Tools Used
+## 8. Technologies Used
 
 | Technology | Purpose |
 |---|---|
 | Python | Main programming language |
-| TensorFlow / Keras | Autoencoder, VAE and DCGAN implementation |
+| TensorFlow / Keras | Autoencoder, VAE and DCGAN |
 | NumPy | Numerical operations |
-| Pandas | Evaluation and comparison tables |
-| Matplotlib | Image visualization and loss graphs |
+| Matplotlib | Image visualization and loss plots |
 | PyTorch | Stable Diffusion execution |
-| Hugging Face Diffusers | Pretrained diffusion pipeline |
+| Hugging Face Diffusers | Loading the pretrained diffusion model |
 | Transformers | Model dependencies |
-| Accelerate | Model execution and memory optimization |
-| Google Colab | Cloud-based notebook execution |
+| Accelerate | Model execution support |
+| Google Colab | Cloud-based execution environment |
 
 ## 9. Project Structure
 
-The project is organized as follows:
-
 ```text
-Assignment_02_Generative_AI/
+Assignment No. 2: Comparative Study/
 │
-├── Sakshi_Walunj_GenerativeAILabAssignment.ipynb
+├── Screenshots/
+│   ├── 01_fashion_mnist_samples.png
+│   ├── 02_autoencoder_loss.png
+│   ├── 03_autoencoder_reconstruction.PNG
+│   ├── 04_vae_loss.PNG
+│   ├── 05_vae_reconstruction.PNG
+│   ├── 06_dcgan_generated_grid.PNG
+│   ├── 07_dcgan_losses.PNG
+│   └── 08_stable_diffusion_output.PNG
 │
-├── README.md
-│
-└── screenshots/
-    ├── 01_fashion_mnist_samples.png
-    ├── 02_autoencoder_loss.png
-    ├── 03_autoencoder_reconstruction.png
-    ├── 04_vae_loss.png
-    ├── 05_vae_reconstruction.png
-    ├── 06_dcgan_generated_grid.png
-    ├── 07_dcgan_losses.png
-    └── 08_stable_diffusion_output.png
+├── Assignment-02_Presentation.pptx
+├── Assignment-02_Comparative_Study_Report.pdf
+├── Sakshi_Walunj_Comparative_Study.ipynb
+└── readme.md
 ```
 
-The `screenshots` directory contains the practical evidence captured from the executed notebook. The README uses relative image paths, so the folder must remain in the same project directory when uploading to GitHub.
+The `Screenshots` folder contains the visual outputs generated during the practical execution. All images are linked using relative paths so they can be displayed directly on GitHub.
 
 ## 10. Execution Procedure
 
-1. Open the notebook using Google Colab.
-2. Select a GPU runtime where available.
-3. Execute the import and dataset preparation cells.
-4. Train and evaluate the Autoencoder.
-5. Train and evaluate the Variational Autoencoder.
-6. Execute the DCGAN training and image-generation cells.
-7. Load the pretrained Stable Diffusion pipeline.
-8. Generate the image using the specified prompt.
-9. Review the reconstruction metrics and model comparison.
-10. Save the executed notebook and export the practical screenshots.
+1. Open the Jupyter Notebook in Google Colab.
+2. Select a GPU runtime for faster model execution.
+3. Import the required libraries.
+4. Load and preprocess the Fashion-MNIST dataset.
+5. Build, train and evaluate the Autoencoder.
+6. Build, train and evaluate the VAE.
+7. Train DCGAN and visualize its generated samples.
+8. Load the pretrained Stable Diffusion pipeline.
+9. Generate an image using the specified text prompt.
+10. Compare reconstruction metrics and generated outputs.
 
-Stable Diffusion requires downloading its pretrained model weights and dependencies. A GPU is recommended for faster inference.
+Stable Diffusion requires access to the pretrained model and its dependencies. GPU execution is recommended.
 
-## 11. AI Usage and Verification
+## 11. AI Tools and Verification
 
-**AI tool used:** ChatGPT.
+**AI Tool Used:** ChatGPT.
 
-AI assistance was used to understand model architectures, organize implementation steps, resolve coding issues and interpret the differences between reconstruction and generation models.
+AI assistance was used for understanding model architectures, debugging implementation issues, improving code structure and interpreting experimental results.
 
-**Important prompts used:**
+**Prompts Used:**
+- Explain the working principle of Autoencoder and VAE.
+- Help implement image reconstruction using Fashion-MNIST.
+- Explain the generator and discriminator in DCGAN.
+- Demonstrate text-to-image generation using pretrained Stable Diffusion.
+- Compare the four generative AI models based on their outputs and applications.
 
-1. Explain the differences between Autoencoder and Variational Autoencoder architectures.
-2. Help implement image reconstruction using Fashion-MNIST.
-3. Explain DCGAN generator and discriminator architecture and training.
-4. Demonstrate image generation using a pretrained Stable Diffusion model.
-5. Compare the reconstruction and generation results of the four models.
+**Verification:**
+- Checked dataset dimensions and normalization.
+- Compared original and reconstructed images.
+- Evaluated AE and VAE using test-set MSE and MAE.
+- Examined DCGAN generated samples and training losses.
+- Checked the Stable Diffusion image against the input prompt.
+- Referred to official documentation for model concepts and implementation.
 
-**Verification process:**
+## 12. Group Members
 
-- Checked the dataset dimensions and normalization.
-- Examined the original and reconstructed images.
-- Compared AE and VAE using test-set MSE and MAE.
-- Inspected DCGAN generated images and loss curves.
-- Checked the Stable Diffusion output against the text prompt.
-- Reviewed model concepts using TensorFlow and Hugging Face documentation.
-
-## 12. Group Contributions
-
-The assignment was completed collaboratively by three group members.
-
-- **Sakshi Uttam Walunj:** [Add your actual contribution in 2–3 lines.]
-- **Shreya Dattaram Bhosale:** [Add her actual contribution in 2–3 lines.]
-- **Dhanashri Shah:** [Add her actual contribution in 2–3 lines.]
+- Sakshi Uttam Walunj
+- Shreya Dattaram Bhosale
+- Dhanashri Shah
 
 ## 13. Key Learning Outcomes
 
-- Understood convolutional image reconstruction using Autoencoders.
-- Studied probabilistic latent representations in VAEs.
-- Learned the purpose of the reparameterization trick and KL divergence.
-- Understood adversarial learning using DCGAN.
-- Explored pretrained diffusion models for prompt-conditioned generation.
-- Interpreted model loss curves and reconstruction metrics.
-- Identified differences between reconstruction and image generation.
+- Understanding convolutional Autoencoder architecture.
+- Learning probabilistic latent representations in VAE.
+- Understanding the reparameterization trick and KL divergence.
+- Studying adversarial training using DCGAN.
+- Using pretrained Stable Diffusion for text-to-image generation.
+- Interpreting training and validation loss curves.
+- Comparing reconstruction models using MSE and MAE.
+- Understanding the differences between reconstruction and image generation.
 
 ## 14. Limitations and Future Scope
 
 **Limitations**
+- Fashion-MNIST contains small grayscale images and is simpler than real-world image datasets.
+- Reconstruction quality depends on model architecture and training configuration.
+- DCGAN training may be unstable and generated images can contain visual artifacts.
+- Stable Diffusion requires significant computational resources.
+- Reconstruction metrics cannot be directly used to rank models that generate unrelated images.
 
-- Fashion-MNIST contains small grayscale images and does not represent the complexity of real-world images.
-- AE and VAE reconstruction quality depends on training configuration and latent dimension.
-- DCGAN may generate blurred or incomplete samples when adversarial training is unstable.
-- Stable Diffusion requires substantial computational resources and pretrained model downloads.
-- Reconstruction metrics cannot directly rank models that generate unrelated new images.
-
-**Future improvements**
-
+**Future Scope**
 - Experiment with different latent dimensions and VAE beta values.
-- Study the effect of additional DCGAN training and hyperparameter tuning.
-- Explore conditional GANs for category-specific image generation.
-- Fine-tune diffusion models on specialized image datasets.
-- Evaluate generated images using additional image-quality and diversity metrics.
+- Improve DCGAN training stability and image quality.
+- Explore conditional GANs for class-specific image generation.
+- Fine-tune diffusion models on domain-specific datasets.
+- Evaluate generated images using additional quality and diversity metrics.
 
 ## 15. Conclusion
 
-The practical study examined four generative AI models across image reconstruction and image generation tasks.
+This assignment provided practical experience with four different generative AI approaches: Autoencoder, Variational Autoencoder, DCGAN and Stable Diffusion.
 
-The Autoencoder and VAE were used to reconstruct Fashion-MNIST images, with their performance evaluated using MSE, MAE and visual comparison. DCGAN generated new clothing-like images from random noise, while pretrained Stable Diffusion produced a fashion-product image from a text prompt.
+The Autoencoder and VAE were used for reconstructing Fashion-MNIST images, while DCGAN generated new clothing-like samples from random noise. Pretrained Stable Diffusion was used to generate an image from a natural-language prompt.
 
-The experiments provided an understanding of deterministic and probabilistic latent representations, adversarial learning and diffusion-based image generation. They also demonstrated how the choice of model architecture and generation approach affects the resulting outputs.
+The experiments helped in understanding latent representations, reconstruction losses, adversarial learning and diffusion-based generation. They also demonstrated how different generative model architectures are suited to different image-related tasks.
 
 ## 16. References
 
-1. Xiao, H., Rasul, K. and Vollgraf, R. (2017). *Fashion-MNIST: A Novel Image Dataset for Benchmarking Machine Learning Algorithms.*
-2. Kingma, D. P. and Welling, M. (2013). *Auto-Encoding Variational Bayes.*
-3. Radford, A., Metz, L. and Chintala, S. (2015). *Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks.*
-4. [TensorFlow Documentation](https://www.tensorflow.org/)
-5. [Fashion-MNIST Dataset](https://github.com/zalandoresearch/fashion-mnist)
-6. [Hugging Face Diffusers Documentation](https://huggingface.co/docs/diffusers)
-7. [Stable Diffusion v1.5 Model](https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5)
+1. Fashion-MNIST Dataset – https://github.com/zalandoresearch/fashion-mnist
+2. TensorFlow Documentation – https://www.tensorflow.org/
+3. Kingma, D. P. and Welling, M., "Auto-Encoding Variational Bayes", 2013.
+4. Radford, A., Metz, L. and Chintala, S., "Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks", 2015.
+5. Hugging Face Diffusers Documentation – https://huggingface.co/docs/diffusers
+6. Stable Diffusion v1.5 – https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5
 
 ---
 
 **Prepared by:** Sakshi Uttam Walunj  
 **PRN:** 202502110007  
-**Course:** Generative AI Lab  
-**Department:** CSE (AI & ML)  
-**Institute:** MIT Academy of Engineering, Alandi, Pune
+**MIT Academy of Engineering, Alandi, Pune**
